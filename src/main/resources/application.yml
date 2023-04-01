@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3310/testauthdb
+    username: user1
+    password: pass1
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    generate-ddl: true
+
+access-refresh-token-path: "access-refresh-token-keys"
+
+access-token:
+  private: "access-refresh-token-keys/access-token-private.key"
+  public: "access-refresh-token-keys/access-token-public.key"
+
+refresh-token:
+  private: "access-refresh-token-keys/refresh-token-private.key"
+  public: "access-refresh-token-keys/refresh-token-public.key"
+
+logging:
+  level:
+    org:
+      hibernate:
+        sql: DEBUG
