@@ -20,6 +20,5 @@ refresh-token:
 
 logging:
   level:
-    org:
-      hibernate:
-        sql: DEBUG
+    org.hibernate.sql: DEBUG
+    org.springframework.security: DEBUG

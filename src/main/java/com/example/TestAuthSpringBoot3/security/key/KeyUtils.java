@@ -1,8 +1,6 @@
-package com.example.TestAuthSpringBoot3.security.keys;
+package com.example.TestAuthSpringBoot3.security.key;
 
 import java.security.Key;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
 
 public interface KeyUtils {
 

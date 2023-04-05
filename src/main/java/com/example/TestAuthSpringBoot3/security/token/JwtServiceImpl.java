@@ -1,12 +1,11 @@
 package com.example.TestAuthSpringBoot3.security.token;
 
 import com.example.TestAuthSpringBoot3.dto.TokenDTO;
-import com.example.TestAuthSpringBoot3.security.keys.KeyUtils;
+import com.example.TestAuthSpringBoot3.security.key.KeyUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

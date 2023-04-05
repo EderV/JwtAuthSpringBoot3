@@ -2,7 +2,7 @@ package com.example.TestAuthSpringBoot3.security.token;
 
 import com.example.TestAuthSpringBoot3.dto.TokenDTO;
 import com.example.TestAuthSpringBoot3.entity.User;
-import com.example.TestAuthSpringBoot3.security.keys.KeyUtils;
+import com.example.TestAuthSpringBoot3.security.key.KeyUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
