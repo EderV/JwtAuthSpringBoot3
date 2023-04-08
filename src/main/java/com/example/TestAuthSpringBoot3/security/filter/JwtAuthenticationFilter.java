@@ -7,8 +7,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,9 +22,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -35,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         SecurityContextHolder.getContext().setAuthentication(null);
 
-        if (!requestMatcher.matches(request)) {
+//        if (!requestMatcher.matches(request)) {
             var authHeader = request.getHeader("Authorization");
 
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -44,14 +48,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 var user = userRepository.loadUserByUsername(username);
 
                 if (user != null) {
+                    var authorities = new ArrayList<GrantedAuthority>();
+                    authorities.add((GrantedAuthority) () -> "ROLE_ADMIN");
+
                     var authentication = UsernamePasswordAuthenticationToken
-                            .authenticated(user, null, Collections.emptyList());
+                            .authenticated(user, null, authorities);
+                    log.error("Is authenticated: " + authentication.isAuthenticated());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
-        }
+//        }
 
         filterChain.doFilter(request, response);
     }

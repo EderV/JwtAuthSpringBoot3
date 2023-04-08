@@ -58,7 +58,7 @@ public class TokenGeneratorImpl implements TokenGenerator {
     private String createAccessToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Instant now = Instant.now();
-        Instant expirationDate = now.plus(5, ChronoUnit.MINUTES);
+        Instant expirationDate = now.plus(50, ChronoUnit.MINUTES);
 
         String username = user.getUsername();
 

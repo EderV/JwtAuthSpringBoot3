@@ -36,23 +36,23 @@ public class AuthController {
         return authService.login(cred);
     }
 
-    @GetMapping
+    @GetMapping("/test")
     public ResponseEntity<?> test() {
-        User user = new User();
-        user.setUsername("Eder");
-        user.setPassword("12345");
-
-        Authentication authentication = UsernamePasswordAuthenticationToken
-                .authenticated(user, "12345", Collections.emptyList());
-
-
-        TokenDTO tokenDTO = jwtService.generateTokenPair(authentication);
-        log.error("Access token: " + tokenDTO.getAccessToken());
-        log.error("Refresh token: " + tokenDTO.getRefreshToken());
-
-        String username = jwtService.extractUsername(tokenDTO.getAccessToken());
-        log.error("Username: " + username);
+//        User user = new User();
+//        user.setUsername("Eder");
+//        user.setPassword("12345");
+//
+//        Authentication authentication = UsernamePasswordAuthenticationToken
+//                .authenticated(user, "12345", Collections.emptyList());
+//
+//        TokenDTO tokenDTO = jwtService.generateTokenPair(authentication);
+//        log.error("Access token: " + tokenDTO.getAccessToken());
+//        log.error("Refresh token: " + tokenDTO.getRefreshToken());
+//
+//        String username = jwtService.extractUsername(tokenDTO.getAccessToken());
+//        log.error("Username: " + username);
 
         return ResponseEntity.ok("Test OK");
     }
+
 }

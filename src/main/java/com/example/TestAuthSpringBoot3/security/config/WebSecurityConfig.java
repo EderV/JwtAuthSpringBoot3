@@ -25,7 +25,8 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationEn
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-    private final UserRepository userRepository;
+
+    private final UserDetailsService userDetailsService;
     private final PasswordEncoder encoder;
     private final JwtAuthenticationFilter filter;
 
@@ -33,16 +34,18 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/test/role").hasRole("ADMIN")
                 .anyRequest().authenticated())
 
                 .cors().disable()
                 .csrf().disable()
                 .httpBasic().disable()
 
-                .authenticationProvider(authenticationProvider())
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
-
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                .securityContext((securityContext) -> securityContext.requireExplicitSave(false))
+                //.authenticationProvider(authenticationProvider())
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
 
                 .exceptionHandling((exceptions) -> exceptions
                         .authenticationEntryPoint(new BasicAuthenticationEntryPoint())
@@ -54,7 +57,7 @@ public class WebSecurityConfig {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(encoder);
         return authProvider;
     }
@@ -62,11 +65,6 @@ public class WebSecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return userRepository::loadUserByUsername;
     }
 
 }
