@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -34,25 +36,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody CredentialsDTO cred) {
         return authService.login(cred);
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<?> test() {
-//        User user = new User();
-//        user.setUsername("Eder");
-//        user.setPassword("12345");
-//
-//        Authentication authentication = UsernamePasswordAuthenticationToken
-//                .authenticated(user, "12345", Collections.emptyList());
-//
-//        TokenDTO tokenDTO = jwtService.generateTokenPair(authentication);
-//        log.error("Access token: " + tokenDTO.getAccessToken());
-//        log.error("Refresh token: " + tokenDTO.getRefreshToken());
-//
-//        String username = jwtService.extractUsername(tokenDTO.getAccessToken());
-//        log.error("Username: " + username);
-
-        return ResponseEntity.ok("Test OK");
     }
 
 }

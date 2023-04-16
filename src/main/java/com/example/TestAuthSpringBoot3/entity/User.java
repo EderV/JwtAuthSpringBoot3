@@ -1,37 +1,62 @@
 package com.example.TestAuthSpringBoot3.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "user")
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
+    @Column(length = 36)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     private int id;
 
-    @NonNull
+    @Column
+    private String email;
+
     @Column
     private String username;
 
-    @NonNull
     @Column
     private String password;
 
+    @Column(name = "account_enabled")
+    private boolean accountEnabled;
+
+    @Column(name = "account_expired")
+    private boolean accountExpired;
+
+    @Column(name = "account_locked")
+    private boolean accountLocked;
+
+    @Column(name = "credentials_expired")
+    private boolean credentialsExpired;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss")
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Role> roles;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return roles;
     }
 
     @Override
@@ -46,21 +71,27 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return !accountExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !accountLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return !credentialsExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return accountEnabled;
     }
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = new Date();
+    }
+
 }

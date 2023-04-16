@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class DefaultController {
 
-    @PostMapping("/test")
+    @GetMapping("/test")
     public ResponseEntity<?> test(@AuthenticationPrincipal User user) {
 //        log.error(user.toString());
-        return ResponseEntity.ok("Test OK");
+        return ResponseEntity.ok("Hola " + user.getUsername());
     }
 
     @GetMapping("/test/role")

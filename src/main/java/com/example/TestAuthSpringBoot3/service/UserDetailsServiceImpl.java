@@ -1,7 +1,6 @@
 package com.example.TestAuthSpringBoot3.service;
 
-import com.example.TestAuthSpringBoot3.entity.User;
-import com.example.TestAuthSpringBoot3.repository.UserRepository;
+import com.example.TestAuthSpringBoot3.repository.service.UserRepositoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,11 +11,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserRepositoryService userRepositoryService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetails user = userRepository.loadUserByUsername("Eder");
-        return user;
+        return userRepositoryService.getUserFromUsername(username);
     }
 }

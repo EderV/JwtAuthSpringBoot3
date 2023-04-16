@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
-    generate-ddl: true
+    generate-ddl: false
 
 access-refresh-token-path: "access-refresh-token-keys"
 
@@ -18,7 +18,13 @@ refresh-token:
   private: "access-refresh-token-keys/refresh-token-private.key"
   public: "access-refresh-token-keys/refresh-token-public.key"
 
+endpoints:
+  public: "/api/auth/**"
+
 logging:
   level:
-    org.hibernate.sql: DEBUG
-    org.springframework.security: DEBUG
+    org:
+      hibernate.sql: DEBUG
+      springframework:
+        security: DEBUG
+        transaction.interceptor: DEBUG
