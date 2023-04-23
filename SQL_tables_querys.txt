@@ -1,0 +1,43 @@
+// ----------------- Users table ----------------- //
+
+CREATE TABLE user (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255),
+    username VARCHAR(255),
+    password VARCHAR(255),
+    account_enabled BOOLEAN,
+    account_expired BOOLEAN,
+    account_locked BOOLEAN,
+    credentials_expired BOOLEAN,
+    created_at DATE
+)
+
+// ----------------------------------------------- //
+
+// ----------------- Roles table ----------------- //
+
+CREATE TABLE role (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    role VARCHAR(255),
+    expiration_date DATE,
+    created_at DATE,
+    CONSTRAINT fk_user_role FOREIGN KEY(user_id) REFERENCES user(id)
+)
+
+// ----------------------------------------------- //
+
+// ----------------- Tokens table ---------------- //
+
+CREATE TABLE token (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    access_token VARCHAR(255),
+    refresh_token VARCHAR(255),
+    valid_token_pair BOOLEAN,
+    updated_at DATE,
+    created_at DATE,
+    CONSTRAINT fk_user_token FOREIGN KEY(user_id) REFERENCES user(id)
+)
+
+// ----------------------------------------------- //
