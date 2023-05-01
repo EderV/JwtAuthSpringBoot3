@@ -10,11 +10,12 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import java.io.IOException;
 
 @Slf4j
-public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class AdvancedAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         log.error("Authentication exception caught ");
+        response.getWriter().write(authException.getMessage());
     }
 
 }

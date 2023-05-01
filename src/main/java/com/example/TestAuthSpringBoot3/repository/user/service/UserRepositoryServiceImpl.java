@@ -1,7 +1,7 @@
-package com.example.TestAuthSpringBoot3.repository.service;
+package com.example.TestAuthSpringBoot3.repository.user.service;
 
 import com.example.TestAuthSpringBoot3.entity.User;
-import com.example.TestAuthSpringBoot3.repository.UserRepository;
+import com.example.TestAuthSpringBoot3.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ public class UserRepositoryServiceImpl implements UserRepositoryService {
 
     @Override
     public void saveUser(User user) {
-
+        userRepository.save(user);
     }
 
     @Override

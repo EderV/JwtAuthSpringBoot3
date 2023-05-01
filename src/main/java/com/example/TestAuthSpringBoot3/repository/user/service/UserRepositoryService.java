@@ -1,4 +1,4 @@
-package com.example.TestAuthSpringBoot3.repository.service;
+package com.example.TestAuthSpringBoot3.repository.user.service;
 
 import com.example.TestAuthSpringBoot3.entity.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

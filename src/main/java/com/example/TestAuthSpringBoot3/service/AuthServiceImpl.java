@@ -4,7 +4,7 @@ import com.example.TestAuthSpringBoot3.dto.CredentialsDTO;
 import com.example.TestAuthSpringBoot3.dto.RegistrationDTO;
 import com.example.TestAuthSpringBoot3.entity.Role;
 import com.example.TestAuthSpringBoot3.entity.User;
-import com.example.TestAuthSpringBoot3.repository.service.UserRepositoryService;
+import com.example.TestAuthSpringBoot3.repository.user.service.UserRepositoryService;
 import com.example.TestAuthSpringBoot3.security.token.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,15 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 
 @Service
@@ -74,7 +71,7 @@ public class AuthServiceImpl implements AuthService {
 
             try {
                 var successAuthentication = authenticationProvider.authenticate(authentication);
-                return ResponseEntity.ok(jwtService.generateTokenPair(successAuthentication));
+                return ResponseEntity.ok(jwtService.getTokenPair(successAuthentication));
             } catch (AuthenticationException ex) {
                 return new ResponseEntity<>(
                         "Provided credentials cannot be authenticated ", HttpStatus.UNAUTHORIZED);

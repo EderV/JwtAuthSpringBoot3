@@ -1,6 +1,6 @@
 package com.example.TestAuthSpringBoot3.service;
 
-import com.example.TestAuthSpringBoot3.repository.service.UserRepositoryService;
+import com.example.TestAuthSpringBoot3.repository.user.service.UserRepositoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -11,7 +11,7 @@ import java.util.Date;
 
 public interface JwtService {
 
-    TokenDTO generateTokenPair(Authentication authentication);
+    TokenDTO getTokenPair(Authentication authentication);
 
     String extractUsername(String token);
 

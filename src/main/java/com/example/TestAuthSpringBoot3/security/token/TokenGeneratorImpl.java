@@ -4,6 +4,7 @@ import com.example.TestAuthSpringBoot3.dto.TokenDTO;
 import com.example.TestAuthSpringBoot3.entity.User;
 import com.example.TestAuthSpringBoot3.security.key.KeyUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,12 @@ import java.util.HashMap;
 @Component
 @RequiredArgsConstructor
 public class TokenGeneratorImpl implements TokenGenerator {
+
+    @Value("${access-token.duration_minutes}")
+    private long accessTokenDuration;
+
+    @Value("${refresh-token.duration_days}")
+    private long refreshTokenDuration;
 
     private final KeyUtils keyUtils;
 
@@ -58,9 +65,7 @@ public class TokenGeneratorImpl implements TokenGenerator {
     private String createAccessToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Instant now = Instant.now();
-        Instant expirationDate = now.plus(50, ChronoUnit.MINUTES);
-
-        String username = user.getUsername();
+        Instant expirationDate = now.plus(accessTokenDuration, ChronoUnit.MINUTES);
 
         return Jwts.builder()
                 .setClaims(new HashMap<>())
@@ -74,7 +79,7 @@ public class TokenGeneratorImpl implements TokenGenerator {
     private String createRefreshToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Instant now = Instant.now();
-        Instant expirationDate = now.plus(30, ChronoUnit.DAYS);
+        Instant expirationDate = now.plus(refreshTokenDuration, ChronoUnit.DAYS);
 
         return Jwts.builder()
                 .setClaims(new HashMap<>())

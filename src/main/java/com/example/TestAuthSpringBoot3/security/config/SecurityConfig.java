@@ -1,5 +1,6 @@
 package com.example.TestAuthSpringBoot3.security.config;
 
+import com.example.TestAuthSpringBoot3.security.error.AdvancedAuthenticationEntryPoint;
 import com.example.TestAuthSpringBoot3.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +36,7 @@ public class SecurityConfig {
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
 
                 .exceptionHandling((exceptions) -> exceptions
-                        .authenticationEntryPoint(new BasicAuthenticationEntryPoint())
+                        .authenticationEntryPoint(new AdvancedAuthenticationEntryPoint())
                         .accessDeniedHandler(new AccessDeniedHandlerImpl()));
 
         return http.build();
