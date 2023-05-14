@@ -1,5 +1,6 @@
 package com.example.TestAuthSpringBoot3.security.filter;
 
+import com.example.TestAuthSpringBoot3.exception.TokenNotFoundException;
 import com.example.TestAuthSpringBoot3.security.token.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -67,8 +68,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private boolean isJwtValid(String jwt) throws ServletException {
         try {
-            jwtService.validateToken(jwt);
-            return true;
+            return jwtService.validateAccessToken(jwt);
         } catch (SignatureException e) {
             throw new ServletException("Invalid JWT signature: " + e.getMessage());
         } catch (MalformedJwtException e) {
@@ -79,12 +79,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throw new ServletException("JWT token is unsupported: " + e.getMessage());
         } catch (IllegalArgumentException e) {
             throw new ServletException("JWT claims string is empty: " + e.getMessage());
+        } catch (TokenNotFoundException e) {
+            throw new ServletException("Given token do not match with the tokens belonging to the user: " + e.getMessage());
         }
     }
 
     private UserDetails loadUserFromRepository(String jwt) throws ServletException {
         try {
-            var username = jwtService.extractUsername(jwt);
+            var username = jwtService.extractUsernameFromAccessToken(jwt);
             return userDetailsService.loadUserByUsername(username);
         } catch (UsernameNotFoundException e) {
             throw new ServletException("Username extracted from JWT not found in the database");

@@ -11,4 +11,6 @@ public interface UserRepositoryService {
 
     User getUserFromUsername(String username) throws UsernameNotFoundException;
 
+    User getUserById(int id) throws UsernameNotFoundException;
+
 }

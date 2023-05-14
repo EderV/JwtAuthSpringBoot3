@@ -18,4 +18,8 @@ public interface TokensRepositoryService {
 
     TokenDTO findValidTokenTokenPairByUser(User user) throws TokenNotFoundException;
 
+    String findValidAccessTokenByUser(User user) throws TokenNotFoundException;
+
+    String findValidRefreshTokenByUser(User user) throws TokenNotFoundException;
+
 }

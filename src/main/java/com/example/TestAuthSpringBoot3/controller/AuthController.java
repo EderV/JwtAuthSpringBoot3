@@ -38,4 +38,9 @@ public class AuthController {
         return authService.login(cred);
     }
 
+    @PostMapping("/token")
+    public ResponseEntity<?> updateToken(@RequestBody TokenDTO tokenDto) {
+        return authService.updateTokens(tokenDto);
+    }
+
 }

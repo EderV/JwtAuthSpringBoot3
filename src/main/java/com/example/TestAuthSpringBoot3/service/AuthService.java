@@ -10,4 +10,6 @@ public interface AuthService {
     ResponseEntity<?> register(RegistrationDTO reg);
     ResponseEntity<?> login(CredentialsDTO cred);
 
+    ResponseEntity<?> updateTokens(TokenDTO tokenDto);
+
 }

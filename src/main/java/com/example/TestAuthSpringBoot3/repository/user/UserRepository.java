@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 //    @Query("SELECT u FROM User u LEFT JOIN Role r ON u.id = r.user.id WHERE u.username = ?1")
     @Query("" +
             "SELECT u FROM User u " +
-            "LEFT JOIN u.roles r " +
+            "LEFT JOIN FETCH u.roles r " +
             "WHERE u.username = ?1" +
             "")
     Optional<User> loadUserByUsername(String username);

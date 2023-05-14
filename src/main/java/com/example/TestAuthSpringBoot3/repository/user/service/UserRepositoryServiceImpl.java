@@ -25,4 +25,13 @@ public class UserRepositoryServiceImpl implements UserRepositoryService {
         }
         throw new UsernameNotFoundException("User with username " + username + " not found");
     }
+
+    @Override
+    public User getUserById(int id) throws UsernameNotFoundException {
+        var optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
+        }
+        throw new UsernameNotFoundException("User with id " + id + " not found");
+    }
 }

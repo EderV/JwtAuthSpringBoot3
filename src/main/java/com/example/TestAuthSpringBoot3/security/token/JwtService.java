@@ -13,10 +13,17 @@ public interface JwtService {
 
     TokenDTO getTokenPair(Authentication authentication);
 
-    String extractUsername(String token);
+    String extractUsernameFromAccessToken(String token);
 
-    boolean validateToken(String token)
+    String extractUsernameFromRefreshToken(String token);
+
+    boolean validateAccessToken(String token)
             throws SignatureException, MalformedJwtException, ExpiredJwtException, UnsupportedJwtException, IllegalArgumentException;
+
+    boolean validateRefreshToken(String token)
+            throws SignatureException, MalformedJwtException, ExpiredJwtException, UnsupportedJwtException, IllegalArgumentException;
+
+    void invalidateTokens(String username);
 
     Date extractExpirationDate(String token);
 

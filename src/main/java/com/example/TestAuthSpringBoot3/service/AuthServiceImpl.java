@@ -2,6 +2,7 @@ package com.example.TestAuthSpringBoot3.service;
 
 import com.example.TestAuthSpringBoot3.dto.CredentialsDTO;
 import com.example.TestAuthSpringBoot3.dto.RegistrationDTO;
+import com.example.TestAuthSpringBoot3.dto.TokenDTO;
 import com.example.TestAuthSpringBoot3.entity.Role;
 import com.example.TestAuthSpringBoot3.entity.User;
 import com.example.TestAuthSpringBoot3.repository.user.service.UserRepositoryService;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -62,15 +64,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseEntity<?> login(CredentialsDTO cred) {
         if (cred != null) {
-            var username = cred.getUsername();
-            var password = cred.getPassword();
-
-            var userDetails = User.builder().username(username).password(password).build();
-            var authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails, userDetails.getPassword(), userDetails.getAuthorities());
-
             try {
-                var successAuthentication = authenticationProvider.authenticate(authentication);
+                var successAuthentication = authenticateCredentials(cred);
+                jwtService.invalidateTokens(((User) successAuthentication.getPrincipal()).getUsername());
                 return ResponseEntity.ok(jwtService.getTokenPair(successAuthentication));
             } catch (AuthenticationException ex) {
                 return new ResponseEntity<>(
@@ -79,6 +75,36 @@ public class AuthServiceImpl implements AuthService {
         }
 
         return new ResponseEntity<>("Null body", HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public ResponseEntity<?> updateTokens(TokenDTO tokenDto) {
+        if (tokenDto != null) {
+            var refreshToken = tokenDto.getRefreshToken();
+            if (jwtService.validateRefreshToken(refreshToken)) {
+                jwtService.invalidateTokens(jwtService.extractUsernameFromRefreshToken(refreshToken));
+
+                var user = userRepositoryService.getUserById(tokenDto.getUserId());
+                var authentication = new UsernamePasswordAuthenticationToken(
+                        user, user.getPassword(), user.getAuthorities());
+
+                return ResponseEntity.ok(jwtService.getTokenPair(authentication));
+            }
+            jwtService.invalidateTokens(jwtService.extractUsernameFromRefreshToken(refreshToken));
+            return new ResponseEntity<>("Trying to generate new tokens with old refresh token", HttpStatus.UNAUTHORIZED);
+        }
+        return new ResponseEntity<>("Null body", HttpStatus.BAD_REQUEST);
+    }
+
+    private Authentication authenticateCredentials(CredentialsDTO cred) throws AuthenticationException {
+        var username = cred.getUsername();
+        var password = cred.getPassword();
+
+        var userDetails = User.builder().username(username).password(password).build();
+        var authentication = new UsernamePasswordAuthenticationToken(
+                userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+
+        return authenticationProvider.authenticate(authentication);
     }
 
     private User createDefaultUser(RegistrationDTO reg) {
