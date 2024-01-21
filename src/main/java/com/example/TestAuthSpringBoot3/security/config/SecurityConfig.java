@@ -1,6 +1,5 @@
 package com.example.TestAuthSpringBoot3.security.config;
 
-import com.example.TestAuthSpringBoot3.security.error.AdvancedAuthenticationEntryPoint;
 import com.example.TestAuthSpringBoot3.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -8,16 +7,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 
 @Configuration
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
     private final JwtAuthenticationFilter filter;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -36,7 +37,7 @@ public class SecurityConfig {
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
 
                 .exceptionHandling((exceptions) -> exceptions
-                        .authenticationEntryPoint(new AdvancedAuthenticationEntryPoint())
+                        .authenticationEntryPoint(authenticationEntryPoint)
                         .accessDeniedHandler(new AccessDeniedHandlerImpl()));
 
         return http.build();

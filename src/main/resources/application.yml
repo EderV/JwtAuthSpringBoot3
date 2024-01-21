@@ -13,7 +13,7 @@ access-refresh-token-path: "access-refresh-token-keys"
 access-token:
   private: "access-refresh-token-keys/access-token-private.key"
   public: "access-refresh-token-keys/access-token-public.key"
-  duration_minutes: 15
+  duration_minutes: 5
 
 refresh-token:
   private: "access-refresh-token-keys/refresh-token-private.key"
