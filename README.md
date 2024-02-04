@@ -22,7 +22,7 @@ This project aims to perform user authorization using JsonWebToken using Spring 
 ### Endpoints
 * Public
   * POST `/api/auth/register`
-    * body:
+    * Body:
     ```
     {
         "enmail":string,
@@ -30,16 +30,25 @@ This project aims to perform user authorization using JsonWebToken using Spring 
         "password":string
     }
     ```
+    * Response
+      * `200` if user is new
+      * `400` if body is null
+      * `401` if user exists
   * POST `/api/auth/login`
-      * body:
+      * Body:
     ```
     {
         "username":string,
         "password":string
     }
     ```
+    * Response
+      * `200` if user and password are correct
+        * Body: `{"userId":number,"accesssToken":string,"refreshToken":string}`
+      * `400` if body is null
+      * `401` if user and password are not correct
   * POST `/api/auth/token`
-      * body:
+      * Body:
     ```
     {
         "userId":number,
@@ -47,6 +56,11 @@ This project aims to perform user authorization using JsonWebToken using Spring 
         "refreshToken":string
     }
     ```
+    * Response
+      * `200` if userid and refresh token is correct and not expired
+        * Body: `{"userId":number,"accesssToken":string,"refreshToken":string}`
+      * `400` if body is null
+      * `401` if refresh token is expired
 * Authenticated user with any role
   * GET `/api/test`
     * Response: `Hello <username>`
